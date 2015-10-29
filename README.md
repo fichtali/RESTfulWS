@@ -3,5 +3,5 @@
 Getting start RESTful web services Spring (4)
 
 Collaborators : 
-    FICHTALI Mehdi
+    FICHTALI Mehdi &
     Erraji Ayoub
