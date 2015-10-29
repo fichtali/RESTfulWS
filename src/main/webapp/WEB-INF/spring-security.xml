@@ -7,17 +7,32 @@
         http://www.springframework.org/schema/beans 
         http://www.springframework.org/schema/beans/spring-beans-3.2.xsd">
 
-	<http use-expressions="true">
-		<intercept-url pattern="/**" access="isAuthenticated()" />
+	<http use-expressions="true" create-session="stateless"
+		entry-point-ref="digestEntryPoint">
+		<intercept-url pattern="/index/**" access="ROLE_ADMIN" />
 
 		<http-basic />
+		<custom-filter ref="digestFilter" after="BASIC_AUTH_FILTER" />
 	</http>
 
+	<beans:bean id="digestFilter"
+		class="org.springframework.security.web.authentication.www.DigestAuthenticationFilter">
+		<beans:property name="userDetailsService" ref="userService" />
+		<beans:property name="authenticationEntryPoint" ref="digestEntryPoint" />
+	</beans:bean>
+
+	<beans:bean id="digestEntryPoint"
+		class="org.springframework.security.web.authentication.www.DigestAuthenticationEntryPoint">
+		<beans:property name="realmName"
+			value="Contacts Realm via Digest Authentication" />
+		<beans:property name="key" value="acegi" />
+	</beans:bean>
 
 	<authentication-manager>
 		<authentication-provider>
 			<user-service id="userService">
-				<user name="admin" password="admin" authorities="ROLE_ADMIN" />
+				<user name="mehdi" password="open" authorities="ROLE_ADMIN" />
+				<user name="ayoub" password="open" authorities="ROLE_ADMIN" />
 			</user-service>
 		</authentication-provider>
 	</authentication-manager>
